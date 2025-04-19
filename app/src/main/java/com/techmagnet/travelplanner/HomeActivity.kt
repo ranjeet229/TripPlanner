@@ -14,7 +14,6 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -29,6 +28,10 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_itinerary -> loadFragment(ItineraryFragment())
                 R.id.nav_notes -> loadFragment(NotesFragment())
                 R.id.nav_logout -> {
+                    // Clear login status
+                    val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                    prefs.edit().putBoolean("isLoggedIn", false).apply()
+
                     Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()

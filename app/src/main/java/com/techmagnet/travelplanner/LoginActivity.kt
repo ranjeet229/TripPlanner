@@ -17,6 +17,14 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val userData = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+
+        // If user is already logged in, go directly to onboarding screen
+        if (userData.getBoolean("isLoggedIn", false)) {
+            startActivity(Intent(this, onboarding_screen::class.java))
+            finish()
+        }
+
         // Change text color when typing
         setTextColorOnTyping(binding.username)
         setTextColorOnTyping(binding.password)
@@ -26,17 +34,20 @@ class LoginActivity : AppCompatActivity() {
             val username = binding.username.text.toString().trim()
             val password = binding.password.text.toString().trim()
 
-            val userData = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-
             val storedUsername = userData.getString("username", null)
             val storedPassword = userData.getString("password", null)
 
-            Toast.makeText(this, "Stored: $storedUsername - $storedPassword", Toast.LENGTH_LONG).show()
-
             if (username == storedUsername && password == storedPassword) {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                // Navigate to next screen
+
+                // Save login status
+                val editor = userData.edit()
+                editor.putBoolean("isLoggedIn", true)
+                editor.apply()
+
+                // Navigate to onboarding screen
                 startActivity(Intent(this, onboarding_screen::class.java))
+                finish()
             } else {
                 Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
             }
