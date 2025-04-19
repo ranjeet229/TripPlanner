@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
             if (username == storedUsername && password == storedPassword) {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                 // Navigate to next screen
-                startActivity(Intent(this, HomeActivity::class.java))
+                startActivity(Intent(this, onboarding_screen::class.java))
             } else {
                 Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
             }
